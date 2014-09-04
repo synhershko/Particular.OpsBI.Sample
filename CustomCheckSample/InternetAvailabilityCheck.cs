@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using ServiceControl.Plugin.CustomChecks;
 
 namespace CustomCheckSample
@@ -19,8 +20,18 @@ namespace CustomCheckSample
 
         private static bool CheckInternetConnection()
         {
-            var dir = @"C:\Checks\internet";
-            return System.IO.Directory.Exists(dir);
+            try
+            {
+                using (var client = new WebClient())
+                using (var stream = client.OpenRead("http://www.google.com"))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
