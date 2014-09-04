@@ -22,8 +22,8 @@ namespace VideoStore.Sales
                 Debugger.Break();
             }
 
-            Interlocked.Increment(ref messageCount);
-            if (messageCount%(SampleRandomization.IsPeak() ? SampleRandomization.FailedMessagesRateDuringPeaks : SampleRandomization.FailedMessagesRate) == 0)
+            var i = Interlocked.Increment(ref messageCount);
+            if (i%(SampleRandomization.IsPeak() ? SampleRandomization.FailedMessagesRateDuringPeaks : SampleRandomization.FailedMessagesRate) == 0)
                 throw SampleRandomization.RandomException();
 
             Console.Out.WriteLine("We have received an order #{0} for [{1}] video(s).", message.OrderNumber,
