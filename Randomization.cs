@@ -27,4 +27,12 @@ public static class SampleRandomization
 
         return new ArgumentException();
     }
+
+    public static bool ShouldThisOrderFail(int orderNumber)
+    {
+        return orderNumber%
+               (SampleRandomization.IsPeak()
+                   ? SampleRandomization.FailedMessagesRateDuringPeaks
+                   : SampleRandomization.FailedMessagesRate) == 0;
+    }
 }

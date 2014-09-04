@@ -13,8 +13,6 @@ namespace VideoStore.Sales
     {
         public IBus Bus { get; set; }
 
-        private static int messageCount;
-
         public void Handle(SubmitOrder message)
         {
             if (DebugFlagMutator.Debug)
@@ -22,12 +20,11 @@ namespace VideoStore.Sales
                 Debugger.Break();
             }
 
-            var i = Interlocked.Increment(ref messageCount);
-            if (i%(SampleRandomization.IsPeak() ? SampleRandomization.FailedMessagesRateDuringPeaks : SampleRandomization.FailedMessagesRate) == 0)
-                throw SampleRandomization.RandomException();
-
             Console.Out.WriteLine("We have received an order #{0} for [{1}] video(s).", message.OrderNumber,
                                   String.Join(", ", message.VideoIds));
+
+            if (SampleRandomization.ShouldThisOrderFail(message.OrderNumber))
+                throw SampleRandomization.RandomException();
 
             Console.Out.WriteLine("The credit card values will be encrypted when looking at the messages in the queues");
             Console.Out.WriteLine("CreditCard Number is {0}", message.EncryptedCreditCardNumber);
