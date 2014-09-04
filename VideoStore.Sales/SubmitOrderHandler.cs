@@ -1,4 +1,6 @@
-﻿namespace VideoStore.Sales
+﻿using System.Threading;
+
+namespace VideoStore.Sales
 {
     using System;
     using System.Diagnostics;
@@ -11,12 +13,18 @@
     {
         public IBus Bus { get; set; }
 
+        private static int messageCount;
+
         public void Handle(SubmitOrder message)
         {
             if (DebugFlagMutator.Debug)
             {
                 Debugger.Break();
             }
+
+            Interlocked.Increment(ref messageCount);
+            if (messageCount%(SampleRandomization.IsPeak() ? SampleRandomization.FailedMessagesRateDuringPeaks : SampleRandomization.FailedMessagesRate) == 0)
+                throw SampleRandomization.RandomException();
 
             Console.Out.WriteLine("We have received an order #{0} for [{1}] video(s).", message.OrderNumber,
                                   String.Join(", ", message.VideoIds));

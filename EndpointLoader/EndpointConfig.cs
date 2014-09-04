@@ -36,14 +36,14 @@ namespace EndpointLoader
         private void LoopSendMessage(int orderNumber, Stopwatch sw)
         {
             while (true)
-            {
-                int rand = 1000;
+            {                
                 sw.Start();
                 
                 orderNumber = SendMessage(orderNumber);
 
-                rand = new Random().Next(rand);
-                Thread.Sleep(rand);
+                // On peak we sleep less and send more
+                var rand = SampleRandomization.IsPeak() ? 100 : 1000;
+                Thread.Sleep(SampleRandomization.Random.Next(rand));
 
                 if (orderNumber % 1000 == 0)
                 {
