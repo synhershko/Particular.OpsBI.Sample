@@ -43,9 +43,7 @@ namespace EndpointLoader
                 
                 var num = SendMessage();
 
-                // On peak we sleep less and send more
-                var rand = SampleRandomization.IsPeak() ? 100 : 10000;
-                Thread.Sleep(SampleRandomization.Random.Next(rand));
+                Thread.Sleep(SampleRandomization.SleepBetweenMessages());
 
                 if (num % 1000 == 0)
                 {

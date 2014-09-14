@@ -4,8 +4,8 @@ public static class SampleRandomization
 {
     internal static readonly Random Random = new Random();
 
-    public static readonly int FailedMessagesRate = 120;
-    public static readonly int FailedMessagesRateDuringPeaks = 15;
+    public static readonly int FailedMessagesRate = 50;
+    public static readonly int FailedMessagesRateDuringPeaks = 10;
 
 	public static bool IsPeak()
 	{
@@ -14,6 +14,12 @@ public static class SampleRandomization
 	        return true;
 	    return false;
 	}
+
+    public static int SleepBetweenMessages()
+    {
+        // On peak we sleep less and send more
+        return Random.Next(IsPeak() ? 100 : 10000);
+    }
 
     public static Exception RandomException()
     {
@@ -30,9 +36,6 @@ public static class SampleRandomization
 
     public static bool ShouldThisOrderFail(int orderNumber)
     {
-        return orderNumber%
-               (SampleRandomization.IsPeak()
-                   ? SampleRandomization.FailedMessagesRateDuringPeaks
-                   : SampleRandomization.FailedMessagesRate) == 0;
+        return orderNumber%(IsPeak() ? FailedMessagesRateDuringPeaks : FailedMessagesRate) == 0;
     }
 }
