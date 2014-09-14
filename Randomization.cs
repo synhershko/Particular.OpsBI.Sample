@@ -4,8 +4,8 @@ public static class SampleRandomization
 {
     internal static readonly Random Random = new Random();
 
-    public static readonly int FailedMessagesRate = 50;
-    public static readonly int FailedMessagesRateDuringPeaks = 10;
+    public static readonly int FailedMessagesRate = 30;
+    public static readonly int FailedMessagesRateDuringPeaks = 5;
 
 	public static bool IsPeak()
 	{
